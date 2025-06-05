@@ -45,7 +45,7 @@ export function EnhancedProductCard({ product }: EnhancedProductCardProps) {
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <Star key={i} className={`w-4 h-4 ${i < rating ? "text-amber-400 fill-current" : "text-gray-300"}`} />
+      <Star key={i} className={`w-4 h-4 ${i < rating ? "text-theme-medium fill-current" : "text-gray-300"}`} />
     ))
   }
 
@@ -96,7 +96,7 @@ export function EnhancedProductCard({ product }: EnhancedProductCardProps) {
 
           <CardContent className="p-4">
             <div className="mb-2">
-              <p className="text-sm text-amber-600 font-medium">{product.category}</p>
+              <p className="text-sm text-theme-medium font-medium">{product.category}</p>
               <h3 className="font-semibold text-gray-800 line-clamp-2">{product.name}</h3>
             </div>
 
@@ -107,7 +107,7 @@ export function EnhancedProductCard({ product }: EnhancedProductCardProps) {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <span className="text-lg font-bold text-amber-600">₹{product.price.toLocaleString()}</span>
+                <span className="text-lg font-bold text-theme-dark">₹{product.price.toLocaleString()}</span>
                 {product.originalPrice && (
                   <span className="text-sm text-gray-500 line-through">₹{product.originalPrice.toLocaleString()}</span>
                 )}

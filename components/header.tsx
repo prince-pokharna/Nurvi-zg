@@ -18,11 +18,28 @@ import { useAuth } from "@/contexts/auth-context"
 import { CartDrawer } from "@/components/cart-drawer"
 import { SearchDialog } from "@/components/search-dialog"
 
+// Helper function to get wishlist count
+const getWishlistCount = (): number => {
+  if (typeof window !== "undefined") {
+    const wishlist = localStorage.getItem("wishlist")
+    if (wishlist) {
+      try {
+        const items = JSON.parse(wishlist)
+        return Array.isArray(items) ? items.length : 0
+      } catch (e) {
+        return 0
+      }
+    }
+  }
+  return 0
+}
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [wishlistCount, setWishlistCount] = useState(0)
   const { state: cartState } = useCart()
   const { user, logout, isAuthenticated } = useAuth()
   const router = useRouter()
@@ -33,6 +50,32 @@ export default function Header() {
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  // Update wishlist count when component mounts and when localStorage changes
+  useEffect(() => {
+    setWishlistCount(getWishlistCount())
+
+    // Listen for storage events to update wishlist count
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "wishlist") {
+        setWishlistCount(getWishlistCount())
+      }
+    }
+
+    window.addEventListener("storage", handleStorageChange)
+
+    // Custom event for wishlist updates within the same window
+    const handleWishlistUpdate = () => {
+      setWishlistCount(getWishlistCount())
+    }
+
+    window.addEventListener("wishlistUpdated", handleWishlistUpdate)
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange)
+      window.removeEventListener("wishlistUpdated", handleWishlistUpdate)
+    }
   }, [])
 
   const handleAuthClick = () => {
@@ -52,7 +95,7 @@ export default function Header() {
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-500 ${
           isScrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-amber-200"
+            ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-luxury-200"
             : "bg-white/90 backdrop-blur-sm"
         }`}
       >
@@ -80,7 +123,7 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative text-amber-800 hover:text-amber-600 transition-all duration-300 font-medium group py-2"
+                  className="relative text-luxury-800 hover:text-luxury-600 transition-all duration-300 font-medium group py-2"
                 >
                   {item.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 luxury-gradient group-hover:w-full transition-all duration-300 rounded-full"></span>
@@ -94,7 +137,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hover:bg-amber-50 text-amber-700 hover:text-amber-600 transition-all duration-300 rounded-full"
+                className="relative hover:bg-luxury-50 text-luxury-700 hover:text-luxury-600 transition-all duration-300 rounded-full"
                 onClick={() => setIsSearchOpen(true)}
                 title="Search Products"
               >
@@ -121,16 +164,18 @@ export default function Header() {
                 title="Wishlist"
               >
                 <Heart className="h-5 w-5" />
-                <Badge className="absolute -top-1 -right-1 bg-rose-500 hover:bg-rose-600 text-white text-xs h-4 w-4 flex items-center justify-center p-0 text-[10px] border-2 border-white">
-                  3
-                </Badge>
+                {wishlistCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 bg-rose-500 hover:bg-rose-600 text-white text-xs h-4 w-4 flex items-center justify-center p-0 text-[10px] border-2 border-white">
+                    {wishlistCount}
+                  </Badge>
+                )}
               </Button>
 
               {/* Cart */}
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hover:bg-amber-50 text-amber-700 hover:text-amber-600 transition-all duration-300 rounded-full"
+                className="relative hover:bg-luxury-50 text-luxury-700 hover:text-luxury-600 transition-all duration-300 rounded-full"
                 onClick={() => setIsCartOpen(true)}
                 title="Shopping Cart"
               >
@@ -148,41 +193,41 @@ export default function Header() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="hover:bg-amber-50 text-amber-700 hover:text-amber-600 transition-all duration-300 rounded-full"
+                    className="hover:bg-luxury-50 text-luxury-700 hover:text-luxury-600 transition-all duration-300 rounded-full"
                   >
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white border-amber-200 shadow-xl">
+                <DropdownMenuContent align="end" className="w-56 bg-white border-luxury-200 shadow-xl">
                   {isAuthenticated ? (
                     <>
                       <DropdownMenuItem
                         onClick={() => router.push("/account")}
-                        className="text-amber-700 hover:bg-amber-50 hover:text-amber-600"
+                        className="text-luxury-700 hover:bg-luxury-50 hover:text-luxury-600"
                       >
-                        <User className="mr-2 h-4 w-4 text-amber-600" />
+                        <User className="mr-2 h-4 w-4 text-luxury-600" />
                         My Account
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => router.push("/orders")}
-                        className="text-amber-700 hover:bg-amber-50 hover:text-amber-600"
+                        className="text-luxury-700 hover:bg-luxury-50 hover:text-luxury-600"
                       >
-                        <ShoppingBag className="mr-2 h-4 w-4 text-amber-600" />
+                        <ShoppingBag className="mr-2 h-4 w-4 text-luxury-600" />
                         My Orders
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => router.push("/wishlist")}
-                        className="text-amber-700 hover:bg-amber-50 hover:text-amber-600"
+                        className="text-luxury-700 hover:bg-luxury-50 hover:text-luxury-600"
                       >
                         <Heart className="mr-2 h-4 w-4 text-rose-500" />
                         Wishlist
                       </DropdownMenuItem>
-                      <DropdownMenuSeparator className="bg-amber-200" />
+                      <DropdownMenuSeparator className="bg-luxury-200" />
                       <DropdownMenuItem
                         onClick={logout}
-                        className="text-amber-700 hover:bg-amber-50 hover:text-amber-600"
+                        className="text-luxury-700 hover:bg-luxury-50 hover:text-luxury-600"
                       >
-                        <LogOut className="mr-2 h-4 w-4 text-amber-600" />
+                        <LogOut className="mr-2 h-4 w-4 text-luxury-600" />
                         Logout
                       </DropdownMenuItem>
                     </>
@@ -190,16 +235,16 @@ export default function Header() {
                     <>
                       <DropdownMenuItem
                         onClick={() => router.push("/auth")}
-                        className="text-amber-700 hover:bg-amber-50 hover:text-amber-600"
+                        className="text-luxury-700 hover:bg-luxury-50 hover:text-luxury-600"
                       >
-                        <User className="mr-2 h-4 w-4 text-amber-600" />
+                        <User className="mr-2 h-4 w-4 text-luxury-600" />
                         Sign In
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => router.push("/auth?tab=register")}
-                        className="text-amber-700 hover:bg-amber-50 hover:text-amber-600"
+                        className="text-luxury-700 hover:bg-luxury-50 hover:text-luxury-600"
                       >
-                        <User className="mr-2 h-4 w-4 text-amber-600" />
+                        <User className="mr-2 h-4 w-4 text-luxury-600" />
                         Create Account
                       </DropdownMenuItem>
                     </>
@@ -212,7 +257,7 @@ export default function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden hover:bg-amber-50 text-amber-700 hover:text-amber-600 transition-all duration-300 rounded-full"
+              className="lg:hidden hover:bg-luxury-50 text-luxury-700 hover:text-luxury-600 transition-all duration-300 rounded-full"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -221,7 +266,7 @@ export default function Header() {
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="lg:hidden py-6 border-t border-amber-200 bg-white/95 backdrop-blur-md">
+            <div className="lg:hidden py-6 border-t border-luxury-200 bg-white/95 backdrop-blur-md">
               <nav className="flex flex-col space-y-4">
                 {[
                   { href: "/", label: "Home" },
@@ -232,20 +277,20 @@ export default function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="text-amber-700 hover:text-amber-600 transition-colors font-medium px-2 py-2 rounded-lg hover:bg-amber-50"
+                    className="text-luxury-700 hover:text-luxury-600 transition-colors font-medium px-2 py-2 rounded-lg hover:bg-luxury-50"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}
                   </Link>
                 ))}
               </nav>
-              <div className="flex items-center justify-between mt-6 pt-6 border-t border-amber-200">
+              <div className="flex items-center justify-between mt-6 pt-6 border-t border-luxury-200">
                 <div className="flex items-center space-x-3">
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsSearchOpen(true)}
-                    className="hover:bg-amber-50 text-amber-600 rounded-full"
+                    className="hover:bg-luxury-50 text-luxury-600 rounded-full"
                   >
                     <Search className="h-5 w-5" />
                   </Button>
@@ -264,14 +309,16 @@ export default function Header() {
                     className="hover:bg-rose-50 text-rose-500 rounded-full relative"
                   >
                     <Heart className="h-5 w-5" />
-                    <Badge className="absolute -top-1 -right-1 bg-rose-500 text-white text-xs h-4 w-4 flex items-center justify-center p-0">
-                      3
-                    </Badge>
+                    {wishlistCount > 0 && (
+                      <Badge className="absolute -top-1 -right-1 bg-rose-500 text-white text-xs h-4 w-4 flex items-center justify-center p-0">
+                        {wishlistCount}
+                      </Badge>
+                    )}
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="relative hover:bg-amber-50 text-amber-600 rounded-full"
+                    className="relative hover:bg-luxury-50 text-luxury-600 rounded-full"
                     onClick={() => setIsCartOpen(true)}
                   >
                     <ShoppingBag className="h-5 w-5" />
@@ -285,7 +332,7 @@ export default function Header() {
                     variant="ghost"
                     size="icon"
                     onClick={handleAuthClick}
-                    className="hover:bg-amber-50 text-amber-600 rounded-full"
+                    className="hover:bg-luxury-50 text-luxury-600 rounded-full"
                   >
                     <User className="h-5 w-5" />
                   </Button>

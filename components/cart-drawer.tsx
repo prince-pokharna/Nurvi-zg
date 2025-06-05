@@ -48,9 +48,9 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-amber-200">
+          <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <div className="flex items-center space-x-2">
-              <ShoppingBag className="h-5 w-5 text-amber-600" />
+              <ShoppingBag className="h-5 w-5 text-theme-medium" />
               <h2 className="text-lg font-semibold text-gray-900">Shopping Cart</h2>
               {state.itemCount > 0 && <Badge className="luxury-gradient text-white">{state.itemCount}</Badge>}
             </div>
@@ -81,7 +81,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                     />
                     <div className="flex-1 space-y-2">
                       <h3 className="font-medium text-gray-900 line-clamp-2">{item.name}</h3>
-                      <p className="text-amber-600 font-semibold">₹{item.price.toLocaleString()}</p>
+                      <p className="text-theme-medium font-semibold">₹{item.price.toLocaleString()}</p>
                       {item.size && <p className="text-xs text-gray-500">Size: {item.size}</p>}
                       {item.color && <p className="text-xs text-gray-500">Color: {item.color}</p>}
 
@@ -90,7 +90,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                           <Button
                             variant="outline"
                             size="icon"
-                            className="h-8 w-8 rounded-full"
+                            className="h-8 w-8 rounded-full border-theme-medium text-theme-dark hover:bg-theme-light/10"
                             onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
                           >
                             <Minus className="h-3 w-3" />
@@ -99,7 +99,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                           <Button
                             variant="outline"
                             size="icon"
-                            className="h-8 w-8 rounded-full"
+                            className="h-8 w-8 rounded-full border-theme-medium text-theme-dark hover:bg-theme-light/10"
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           >
                             <Plus className="h-3 w-3" />
@@ -163,7 +163,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                 <Button
                   variant="outline"
                   onClick={handleViewCart}
-                  className="w-full border-amber-400 text-amber-700 hover:bg-amber-50"
+                  className="w-full border-theme-medium text-theme-dark hover:bg-theme-light/10"
                 >
                   View Cart
                 </Button>

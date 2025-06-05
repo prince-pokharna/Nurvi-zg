@@ -53,84 +53,105 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Luxury Color Palette - Warm Golds and Creams
-        luxury: {
-          50: "#fefdf8", // Lightest cream
-          100: "#fef7e0", // Light cream
-          200: "#fdecc4", // Soft cream
-          300: "#fbdc9c", // Light gold
-          400: "#f8c572", // Medium gold
-          500: "#f4a855", // Primary gold
-          600: "#e8903a", // Rich gold
-          700: "#d17532", // Deep gold
-          800: "#a85d2e", // Bronze
-          900: "#874d29", // Dark bronze
-          950: "#4a2614", // Darkest bronze
+        // Main Theme Colors
+        theme: {
+          light: "#B4AFA7", // Lightest of the three
+          medium: "#9E8E80", // Medium tone
+          dark: "#8A8786", // Darkest of the three
         },
+        // Updated luxury palette based on theme colors
+        luxury: {
+          50: "#fefdfb",
+          100: "#f8f6f4",
+          200: "#f2f0ed",
+          300: "#ebe8e4",
+          400: "#e4e0db",
+          500: "#B4AFA7", // Theme light
+          600: "#9E8E80", // Theme medium
+          700: "#8A8786", // Theme dark
+          800: "#7a7370",
+          900: "#6a635f",
+          950: "#4a4440",
+        },
+        // Keep other colors for contrast and functionality
         gold: {
-          50: "#fffbeb",
-          100: "#fef3c7",
-          200: "#fde68a",
-          300: "#fcd34d",
-          400: "#fbbf24",
-          500: "#f59e0b", // Primary gold
-          600: "#d97706",
-          700: "#b45309",
-          800: "#92400e",
-          900: "#78350f",
-          950: "#451a03",
+          50: "#fefdfb",
+          100: "#f8f6f4",
+          200: "#f2f0ed",
+          300: "#ebe8e4",
+          400: "#e4e0db",
+          500: "#B4AFA7",
+          600: "#9E8E80",
+          700: "#8A8786",
+          800: "#7a7370",
+          900: "#6a635f",
+          950: "#4a4440",
         },
         amber: {
-          50: "#fffbeb",
-          100: "#fef3c7",
-          200: "#fde68a",
-          300: "#fcd34d",
-          400: "#fbbf24",
-          500: "#f59e0b",
-          600: "#d97706",
-          700: "#b45309",
-          800: "#92400e",
-          900: "#78350f",
-          950: "#451a03",
-        },
-        cream: {
           50: "#fefdfb",
-          100: "#fef9f0",
-          200: "#fdf2e1",
-          300: "#fbe8c8",
-          400: "#f8d9a3",
-          500: "#f4c474",
-          600: "#eda545",
-          700: "#e08928",
-          800: "#c06d1f",
-          900: "#9c5a1c",
-          950: "#532e0c",
+          100: "#f8f6f4",
+          200: "#f2f0ed",
+          300: "#ebe8e4",
+          400: "#e4e0db",
+          500: "#B4AFA7",
+          600: "#9E8E80",
+          700: "#8A8786",
+          800: "#7a7370",
+          900: "#6a635f",
+          950: "#4a4440",
         },
-        champagne: {
-          50: "#fefdfb",
-          100: "#fef8f0",
-          200: "#fdf0e1",
-          300: "#fbe4c8",
-          400: "#f8d3a3",
-          500: "#f4bd74",
-          600: "#eda245",
-          700: "#e08628",
-          800: "#c06a1f",
-          900: "#9c571c",
-          950: "#532d0c",
+        // Keep standard colors for functionality
+        gray: {
+          50: "#f9fafb",
+          100: "#f3f4f6",
+          200: "#e5e7eb",
+          300: "#d1d5db",
+          400: "#9ca3af",
+          500: "#6b7280",
+          600: "#4b5563",
+          700: "#374151",
+          800: "#1f2937",
+          900: "#111827",
+          950: "#030712",
         },
-        pearl: {
-          50: "#fefefe",
-          100: "#fdfdfd",
-          200: "#fafafa",
-          300: "#f5f5f5",
-          400: "#eeeeee",
-          500: "#e0e0e0",
-          600: "#c2c2c2",
-          700: "#9e9e9e",
-          800: "#757575",
-          900: "#616161",
-          950: "#404040",
+        red: {
+          50: "#fef2f2",
+          100: "#fee2e2",
+          200: "#fecaca",
+          300: "#fca5a5",
+          400: "#f87171",
+          500: "#ef4444",
+          600: "#dc2626",
+          700: "#b91c1c",
+          800: "#991b1b",
+          900: "#7f1d1d",
+          950: "#450a0a",
+        },
+        green: {
+          50: "#f0fdf4",
+          100: "#dcfce7",
+          200: "#bbf7d0",
+          300: "#86efac",
+          400: "#4ade80",
+          500: "#22c55e",
+          600: "#16a34a",
+          700: "#15803d",
+          800: "#166534",
+          900: "#14532d",
+          950: "#052e16",
+        },
+        rose: {
+          50: "#fff1f2",
+          100: "#ffe4e6",
+          200: "#fecdd3",
+          300: "#fda4af",
+          400: "#fb7185",
+          500: "#f43f5e",
+          600: "#e11d48",
+          700: "#be123c",
+          800: "#9f1239",
+          900: "#881337",
+          950: "#4c0519",
         },
       },
       fontFamily: {
@@ -165,20 +186,25 @@ const config: Config = {
           "100%": { backgroundPosition: "200% 0" },
         },
         glow: {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(244, 168, 85, 0.5)" },
-          "50%": { boxShadow: "0 0 30px rgba(244, 168, 85, 0.8)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(158, 142, 128, 0.5)" },
+          "50%": { boxShadow: "0 0 30px rgba(158, 142, 128, 0.8)" },
         },
         "gradient-shift": {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
         },
         "luxury-pulse": {
-          "0%, 100%": { boxShadow: "0 0 0 0 rgba(244, 168, 85, 0.7)" },
-          "70%": { boxShadow: "0 0 0 10px rgba(244, 168, 85, 0)" },
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(158, 142, 128, 0.7)" },
+          "70%": { boxShadow: "0 0 0 10px rgba(158, 142, 128, 0)" },
         },
-        "golden-shine": {
+        "theme-shine": {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
+        },
+        "theme-flow": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
         },
       },
       animation: {
@@ -190,18 +216,31 @@ const config: Config = {
         glow: "glow 2s ease-in-out infinite alternate",
         "gradient-shift": "gradient-shift 3s ease infinite",
         "luxury-pulse": "luxury-pulse 2s infinite",
-        "golden-shine": "golden-shine 2s ease-in-out infinite",
+        "theme-shine": "theme-shine 2s ease-in-out infinite",
+        "theme-flow": "theme-flow 4s ease-in-out infinite",
       },
       backgroundImage: {
-        "luxury-gradient": "linear-gradient(135deg, #f4a855 0%, #e8903a 25%, #d17532 50%, #c06a1f 75%, #9c571c 100%)",
-        "gold-gradient": "linear-gradient(135deg, #fbbf24 0%, #f59e0b 25%, #d97706 50%, #b45309 75%, #92400e 100%)",
-        "rose-gold-gradient":
-          "linear-gradient(135deg, #fda4af 0%, #fb7185 25%, #f43f5e 50%, #e11d48 75%, #be123c 100%)",
-        "cream-gradient": "linear-gradient(135deg, #f8d9a3 0%, #f4c474 25%, #eda545 50%, #e08928 75%, #c06d1f 100%)",
-        "champagne-gradient":
-          "linear-gradient(135deg, #f8d3a3 0%, #f4bd74 25%, #eda245 50%, #e08628 75%, #c06a1f 100%)",
+        // Main theme gradients
+        "luxury-gradient": "linear-gradient(135deg, #B4AFA7 0%, #9E8E80 50%, #8A8786 100%)",
+        "luxury-gradient-reverse": "linear-gradient(135deg, #8A8786 0%, #9E8E80 50%, #B4AFA7 100%)",
+        "theme-gradient-1": "linear-gradient(45deg, #B4AFA7 0%, #9E8E80 100%)",
+        "theme-gradient-2": "linear-gradient(90deg, #9E8E80 0%, #8A8786 100%)",
+        "theme-gradient-3": "linear-gradient(135deg, #8A8786 0%, #B4AFA7 100%)",
+        "theme-gradient-soft":
+          "linear-gradient(135deg, rgba(180, 175, 167, 0.8) 0%, rgba(158, 142, 128, 0.8) 50%, rgba(138, 135, 134, 0.8) 100%)",
+
+        // Alternative gradients
+        "gold-gradient": "linear-gradient(135deg, #B4AFA7 0%, #9E8E80 50%, #8A8786 100%)",
+        "rose-gold-gradient": "linear-gradient(90deg, #8A8786 0%, #9E8E80 50%, #B4AFA7 100%)",
+        "cream-gradient": "linear-gradient(180deg, #B4AFA7 0%, #9E8E80 50%, #8A8786 100%)",
+        "champagne-gradient": "linear-gradient(45deg, #B4AFA7 0%, #9E8E80 25%, #8A8786 50%, #9E8E80 75%, #B4AFA7 100%)",
+
+        // Radial and special gradients
+        "luxury-radial": "radial-gradient(circle at center, #B4AFA7 0%, #9E8E80 50%, #8A8786 100%)",
+        "theme-conic": "conic-gradient(from 0deg, #B4AFA7, #9E8E80, #8A8786, #B4AFA7)",
+
+        // Keep standard gradients for other uses
         "pearl-gradient": "linear-gradient(135deg, #fefefe 0%, #f5f5f5 25%, #eeeeee 50%, #e0e0e0 75%, #c2c2c2 100%)",
-        "luxury-radial": "radial-gradient(circle at center, #f4a855 0%, #e8903a 50%, #d17532 100%)",
       },
     },
   },

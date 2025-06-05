@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Heart, ShoppingBag, X, Grid, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -8,54 +8,44 @@ import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { useCart } from "@/contexts/cart-context"
+import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 
-// Mock wishlist data - in a real app, this would come from a wishlist context or API
-const wishlistItems = [
-  {
-    id: "1",
-    name: "Kundan Elegance Ring",
-    price: 24999,
-    originalPrice: 29999,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Rings",
-    rating: 4.9,
-    reviews: 124,
-    isNew: true,
-    isSale: true,
-  },
-  {
-    id: "2",
-    name: "Pearl Jhumka Earrings",
-    price: 8999,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Earrings",
-    rating: 4.8,
-    reviews: 89,
-    isNew: false,
-    isSale: false,
-  },
-  {
-    id: "3",
-    name: "Temple Jewellery Necklace",
-    price: 45999,
-    originalPrice: 52999,
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Necklaces",
-    rating: 4.9,
-    reviews: 156,
-    isNew: false,
-    isSale: true,
-  },
-]
+// Wishlist context would be ideal, but for now using localStorage
+const getWishlistItems = () => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("wishlist")
+    return saved ? JSON.parse(saved) : []
+  }
+  return []
+}
+
+const saveWishlistItems = (items: any[]) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("wishlist", JSON.stringify(items))
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event("wishlistUpdated"))
+  }
+}
 
 export default function WishlistPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [items, setItems] = useState(wishlistItems)
+  const [items, setItems] = useState<any[]>([])
   const { addItem } = useCart()
+  const { toast } = useToast()
+
+  useEffect(() => {
+    setItems(getWishlistItems())
+  }, [])
 
   const removeFromWishlist = (id: string) => {
-    setItems(items.filter((item) => item.id !== id))
+    const updatedItems = items.filter((item) => item.id !== id)
+    setItems(updatedItems)
+    saveWishlistItems(updatedItems)
+    toast({
+      title: "Removed from wishlist",
+      description: "Item has been removed from your wishlist.",
+    })
   }
 
   const addToCart = (item: any) => {
@@ -65,10 +55,19 @@ export default function WishlistPage() {
       price: item.price,
       image: item.image,
     })
+    toast({
+      title: "Added to cart",
+      description: `${item.name} has been added to your cart.`,
+    })
   }
 
   const clearWishlist = () => {
     setItems([])
+    saveWishlistItems([])
+    toast({
+      title: "Wishlist cleared",
+      description: "All items have been removed from your wishlist.",
+    })
   }
 
   if (items.length === 0) {
@@ -104,7 +103,7 @@ export default function WishlistPage() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div className="flex items-center space-x-4">
               <h1 className="text-3xl font-bold text-gray-900">My Wishlist</h1>
-              <Badge variant="secondary" className="bg-amber-100 text-amber-800">
+              <Badge variant="secondary" className="bg-theme-light text-theme-dark">
                 {items.length} items
               </Badge>
             </div>
@@ -183,7 +182,7 @@ export default function WishlistPage() {
                       </div>
 
                       <div className="p-6 space-y-3">
-                        <div className="text-sm text-amber-600 font-medium">{item.category}</div>
+                        <div className="text-sm text-theme-medium font-medium">{item.category}</div>
                         <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{item.name}</h3>
 
                         <div className="flex items-center justify-between">
@@ -221,7 +220,7 @@ export default function WishlistPage() {
 
                       <div className="flex-1 space-y-3">
                         <div>
-                          <p className="text-sm text-amber-600 font-medium">{item.category}</p>
+                          <p className="text-sm text-theme-medium font-medium">{item.category}</p>
                           <h3 className="text-xl font-semibold text-gray-900">{item.name}</h3>
                         </div>
 
@@ -259,7 +258,11 @@ export default function WishlistPage() {
           {/* Continue Shopping */}
           <div className="text-center mt-12">
             <Link href="/collections">
-              <Button variant="outline" size="lg" className="border-amber-600 text-amber-600 hover:bg-amber-50">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-theme-medium text-theme-medium hover:bg-theme-light"
+              >
                 Continue Shopping
               </Button>
             </Link>

@@ -12,7 +12,7 @@ const categories = [
     description: "Statement pieces for every occasion",
     image: "/placeholder.svg?height=400&width=400",
     count: "150+ Designs",
-    color: "from-gold-400 to-gold-600",
+    color: "from-slate-900 via-gray-900 to-black",
   },
   {
     id: "necklaces",
@@ -20,7 +20,7 @@ const categories = [
     description: "Elegant chains and pendants",
     image: "/placeholder.svg?height=400&width=400",
     count: "200+ Designs",
-    color: "from-rose-400 to-rose-600",
+    color: "from-purple-900 via-indigo-900 to-slate-900",
   },
   {
     id: "earrings",
@@ -28,7 +28,7 @@ const categories = [
     description: "From studs to chandeliers",
     image: "/placeholder.svg?height=400&width=400",
     count: "180+ Designs",
-    color: "from-luxury-400 to-luxury-600",
+    color: "from-emerald-900 via-teal-900 to-cyan-900",
   },
   {
     id: "bracelets",
@@ -36,7 +36,7 @@ const categories = [
     description: "Delicate to bold designs",
     image: "/placeholder.svg?height=400&width=400",
     count: "120+ Designs",
-    color: "from-cream-400 to-cream-600",
+    color: "from-rose-900 via-pink-900 to-purple-900",
   },
   {
     id: "anklets",
@@ -44,7 +44,7 @@ const categories = [
     description: "Graceful ankle accessories",
     image: "/placeholder.svg?height=400&width=400",
     count: "80+ Designs",
-    color: "from-champagne-400 to-champagne-600",
+    color: "from-amber-900 via-orange-900 to-red-900",
   },
 ]
 
@@ -82,7 +82,7 @@ export default function CategoryShowcase() {
                   alt={categories[0].name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className={`absolute inset-0 bg-gradient-to-t ${categories[0].color} opacity-60`} />
+                <div className={`absolute inset-0 bg-gradient-to-t ${categories[0].color} opacity-80`} />
                 <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
                   <div className="space-y-4">
                     <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-medium backdrop-blur-sm">
@@ -118,7 +118,7 @@ export default function CategoryShowcase() {
                     alt={category.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${category.color} opacity-60`} />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${category.color} opacity-80`} />
                   <div className="absolute inset-0 p-6 flex flex-col justify-end text-white">
                     <div className="space-y-2">
                       <div className="inline-block px-2 py-1 bg-white/20 rounded-full text-xs font-medium backdrop-blur-sm">

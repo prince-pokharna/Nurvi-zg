@@ -14,13 +14,15 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
       <LoadingScreen />
       <Header />
-      <Hero />
-      <FeaturedProducts />
-      <CategoryShowcase />
-      <About />
-      <Testimonials />
-      <InstagramFeed />
-      <Contact />
+      <main>
+        <Hero />
+        <FeaturedProducts />
+        <CategoryShowcase />
+        <About />
+        <Testimonials />
+        <InstagramFeed />
+        <Contact />
+      </main>
       <Footer />
     </div>
   )

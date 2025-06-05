@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -12,15 +12,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { useAuth } from "@/contexts/auth-context"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 
 export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const { login, register } = useAuth()
+  const { login, register, isAuthenticated } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { toast } = useToast()
+  const [activeTab, setActiveTab] = useState("login")
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -34,21 +36,56 @@ export default function AuthPage() {
     confirmPassword: "",
   })
 
+  // Set active tab based on URL parameter
+  useEffect(() => {
+    const tab = searchParams.get("tab")
+    if (tab === "register") {
+      setActiveTab("register")
+    }
+  }, [searchParams])
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/account")
+    }
+  }, [isAuthenticated, router])
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      await login(loginData.email, loginData.password)
-      toast({
-        title: "Welcome back!",
-        description: "You have been successfully logged in.",
-      })
-      router.push("/")
+      // Email validation
+      if (!loginData.email || !loginData.email.includes("@")) {
+        toast({
+          title: "Invalid email",
+          description: "Please enter a valid email address.",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Password validation
+      if (!loginData.password || loginData.password.length < 6) {
+        toast({
+          title: "Invalid password",
+          description: "Password must be at least 6 characters.",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      const success = await login(loginData.email, loginData.password)
+      if (success) {
+        router.push("/")
+      }
     } catch (error) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -58,6 +95,36 @@ export default function AuthPage() {
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Name validation
+    if (!registerData.name || registerData.name.trim().length < 2) {
+      toast({
+        title: "Invalid name",
+        description: "Please enter a valid name (at least 2 characters).",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Email validation
+    if (!registerData.email || !registerData.email.includes("@")) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Password validation
+    if (!registerData.password || registerData.password.length < 6) {
+      toast({
+        title: "Invalid password",
+        description: "Password must be at least 6 characters.",
+        variant: "destructive",
+      })
+      return
+    }
 
     if (registerData.password !== registerData.confirmPassword) {
       toast({
@@ -71,16 +138,14 @@ export default function AuthPage() {
     setIsLoading(true)
 
     try {
-      await register(registerData.name, registerData.email, registerData.password)
-      toast({
-        title: "Account created!",
-        description: "Welcome to Nurvi Jewel. You have been logged in.",
-      })
-      router.push("/")
+      const success = await register(registerData.name, registerData.email, registerData.password)
+      if (success) {
+        router.push("/")
+      }
     } catch (error) {
       toast({
         title: "Registration failed",
-        description: "Please try again with different details.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -89,7 +154,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-theme-light via-white to-theme-light/30">
       <Header />
 
       <main className="pt-20">
@@ -101,7 +166,7 @@ export default function AuthPage() {
 
           <Card className="premium-card shadow-xl">
             <CardContent className="p-0">
-              <Tabs defaultValue="login" className="w-full">
+              <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 rounded-t-lg">
                   <TabsTrigger value="login">Sign In</TabsTrigger>
                   <TabsTrigger value="register">Create Account</TabsTrigger>
@@ -159,7 +224,7 @@ export default function AuthPage() {
                     </Button>
 
                     <div className="text-center">
-                      <a href="#" className="text-sm text-amber-600 hover:underline">
+                      <a href="#" className="text-sm text-theme-medium hover:underline">
                         Forgot your password?
                       </a>
                     </div>
@@ -251,11 +316,11 @@ export default function AuthPage() {
 
                     <p className="text-xs text-gray-600 text-center">
                       By creating an account, you agree to our{" "}
-                      <a href="/terms" className="text-amber-600 hover:underline">
+                      <a href="/terms" className="text-theme-medium hover:underline">
                         Terms of Service
                       </a>{" "}
                       and{" "}
-                      <a href="/privacy" className="text-amber-600 hover:underline">
+                      <a href="/privacy" className="text-theme-medium hover:underline">
                         Privacy Policy
                       </a>
                     </p>
